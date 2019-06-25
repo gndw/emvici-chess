@@ -256,8 +256,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_LocalRotation: {x: 0.38174918, y: -0.122834325, z: 0.051268354, w: 0.91463155}
-  m_LocalPosition: {x: 5.6881833, y: 6.275993, z: -3.5961437}
+  m_LocalRotation: {x: 0.6888463, y: -0.0021772978, z: 0.0020669398, w: 0.72490126}
+  m_LocalPosition: {x: 0.31665355, y: 10.93992, z: -0.52684927}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -307,8 +307,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _boardController:
-    _viewPrefab: {fileID: 7210227739903603077, guid: ebad40d74e0716b46967575972a11892,
+    _viewPrefab: {fileID: 838064822734686753, guid: ebad40d74e0716b46967575972a11892,
       type: 3}
+    _whitePrefabs:
+      PawnView: {fileID: 2539642421736026607, guid: d7eacd5fad1c3e04793074dbcd150c42,
+        type: 3}
+      RookView: {fileID: 2160860830250610438, guid: 900fae360d57e3f4a961b4a6dd7814d2,
+        type: 3}
+      KnightView: {fileID: 7974576699963292549, guid: aa48bfc3b0a8e8d4c8a0875bcc59d33d,
+        type: 3}
+      BishopView: {fileID: 2723686406210483603, guid: e200396519128b149b900d9b2fa3d7bd,
+        type: 3}
+      QueenView: {fileID: 3629217809805919829, guid: 1e9ee08a88b83ac44a8b4185ef305b1f,
+        type: 3}
+      KingView: {fileID: 4467456250592241884, guid: b26d10c0a2e2f1f48aac11ef83709aad,
+        type: 3}
+    _blackPrefabs:
+      PawnView: {fileID: 4384877056195142419, guid: 496be9c5b981417478b2583d36531712,
+        type: 3}
+      RookView: {fileID: 7615933764900978912, guid: 0f7b2a1c48498364890c79b3b0fe642c,
+        type: 3}
+      KnightView: {fileID: 5392942460526024779, guid: bf0be1e003190e04984999fa39f08834,
+        type: 3}
+      BishopView: {fileID: 2287948765928469319, guid: 31df39991766c83448c8d7193e7d1969,
+        type: 3}
+      QueenView: {fileID: 5060571952395444535, guid: f1a2d65dfba11554dbfb11c7b2a53a23,
+        type: 3}
+      KingView: {fileID: 5288344390021665157, guid: eb9733b32485d5f44bc4f9d0aeb08a78,
+        type: 3}
 --- !u!1001 &572709904083904819
 PrefabInstance:
   m_ObjectHideFlags: 0

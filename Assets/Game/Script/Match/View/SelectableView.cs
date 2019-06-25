@@ -8,7 +8,7 @@ namespace Agate.Chess.Match.View
     {
         protected T _collider;
 
-        private void Start ()
+        private void Awake ()
         {
             _collider = GetComponent<T>();
         }
