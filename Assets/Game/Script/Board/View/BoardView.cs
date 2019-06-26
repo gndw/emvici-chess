@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Agate.Chess.Board.Utility;
 using Agate.Chess.Chessman.Utility;
 using Agate.Chess.Game;
@@ -8,6 +9,12 @@ namespace Agate.Chess.Board.View
     public class BoardView : SelectableView<BoxCollider>
     {
         public event BoardFunction OnBoardSelected;
+
+        [SerializeField]
+        private GameObject _boardHighlightPrefab;
+
+        private List<GameObject> _createdBoardHighlights = new List<GameObject>();
+        private List<GameObject> _activeBoardHighlights = new List<GameObject>();
 
         protected override void OnColliderSelected(RaycastHit hit)
         {
@@ -36,6 +43,28 @@ namespace Agate.Chess.Board.View
                 case ChessmanColorType.Light : return GetBoardPosition(new BoardCoord(1,8)) - GetBoardPosition(new BoardCoord(1,1));
                 case ChessmanColorType.Dark : return GetBoardPosition(new BoardCoord(1,1)) - GetBoardPosition(new BoardCoord(1,8));
                 default: return Vector3.zero;
+            }
+        }
+
+        public void SetHighlight (List<BoardCoord> coordinates)
+        {
+            _activeBoardHighlights.ForEach((obj) => obj.SetActive(false));
+            _activeBoardHighlights.Clear();
+
+            int createCount = coordinates.Count - _createdBoardHighlights.Count;
+            for (int i = 0; i < createCount; i++)
+            {
+                GameObject obj = Instantiate(_boardHighlightPrefab, transform);
+                obj.SetActive(false);
+                _createdBoardHighlights.Add(obj);
+            }
+
+            for (int i = 0; i < coordinates.Count; i++)
+            {
+                Vector3 pos = GetBoardPosition(coordinates[i]);
+                _createdBoardHighlights[i].transform.localPosition = new Vector3(pos.x, 0.05f, pos.z);
+                _createdBoardHighlights[i].SetActive(true);
+                _activeBoardHighlights.Add(_createdBoardHighlights[i]);
             }
         }
     }

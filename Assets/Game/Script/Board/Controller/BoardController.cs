@@ -52,5 +52,10 @@ namespace Agate.Chess.Board.Controller
                 _chessmans.Add(icc);
             }
         }
+
+        public void SetHighlight (List<BoardCoord> coordinates)
+        {
+            _view.SetHighlight(coordinates);
+        }
     }
 }
