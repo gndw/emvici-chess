@@ -1,3 +1,4 @@
+using System;
 using Agate.Chess.Game;
 using Agate.MVC.Core;
 using UnityEngine;
@@ -11,6 +12,12 @@ namespace Agate.Chess.Chessman.View
         protected override void OnColliderSelected(RaycastHit hit)
         {
             OnChessmanSelected?.Invoke();
+        }
+
+        internal void Move(Vector3 targetPosition, Action onFinish)
+        {
+            gameObject.transform.position = targetPosition;
+            onFinish();
         }
     }
 }

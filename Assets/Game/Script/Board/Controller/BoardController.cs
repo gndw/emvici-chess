@@ -17,6 +17,7 @@ namespace Agate.Chess.Board.Controller
     {
         public event BoardFunction OnBoardSelected;
         public event ChessmanFunction OnChessmanSelected;
+        public event ChessmanControllerFunction OnChessmanControllerSelected;
 
         private BoardView _view;
         private List<IChessmanController> _chessmans = new List<IChessmanController>();
@@ -48,14 +49,43 @@ namespace Agate.Chess.Board.Controller
                 }
                 
                 icc.Init(_view.GetBoardPosition, _view.GetFacingDirection, data.Key, data.Value.ColorType);
-                icc.OnChessmanSelected += () => OnChessmanSelected?.Invoke(icc.GetChessmanType(), icc.GetChessmanColorType(), icc.GetBoardCoord());
+                icc.OnChessmanSelected += () => 
+                {
+                    OnChessmanSelected?.Invoke(icc.GetChessmanType(), icc.GetChessmanColorType(), icc.GetBoardCoord());
+                    OnChessmanControllerSelected?.Invoke(icc);
+                };
                 _chessmans.Add(icc);
             }
+        }
+
+        public void Move(IChessmanController selectedChessman, BoardCoord targetCoord, Action onFinish)
+        {
+            selectedChessman.Move(targetCoord, onFinish);
         }
 
         public void SetHighlight (List<BoardCoord> coordinates)
         {
             _view.SetHighlight(coordinates);
+        }
+
+        public void ClearHighlight ()
+        {
+            _view.SetHighlight(new List<BoardCoord>());
+        }
+
+        public List<BoardCoord> GetPossibleMoves (IChessmanController icc)
+        {
+            BoardDataModel bdm = GetBoardDataModel();
+            return icc.GetPossibleMoves(bdm);
+        }
+
+        public BoardDataModel GetBoardDataModel ()
+        {
+            BoardDataModel result = new BoardDataModel();
+            _chessmans.ForEach((icc) => {
+                result.Data.Add(icc.GetBoardCoord(), new Chessman.Model.ChessmanDataModel(icc.GetChessmanType(), icc.GetChessmanColorType()));
+            });
+            return result;
         }
     }
 }

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Agate.Chess.Board.Model;
 using Agate.Chess.Board.Utility;
 using Agate.Chess.Chessman.Utility;
 using Agate.MVC.Core;
@@ -10,9 +12,11 @@ namespace Agate.Chess.Chessman.Controller
     {
         event Function OnChessmanSelected;
         void Init(Func<BoardCoord,Vector3> getBoardPosition, Func<ChessmanColorType,Vector3> getFacingDirection, BoardCoord coordinate, ChessmanColorType colorType);
+        void Move(BoardCoord targetCoord, Action onFinish);
         ChessmanType GetChessmanType();
         ChessmanColorType GetChessmanColorType();
         BoardCoord GetBoardCoord();
+        List<BoardCoord> GetPossibleMoves(BoardDataModel boardDataModel);
         void Destroy();
     }
 }

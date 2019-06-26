@@ -5,6 +5,8 @@ using Agate.Chess.Board.Utility;
 using Agate.MVC.Core;
 using UnityEngine;
 using Agate.Chess.Prefab.Controller;
+using Agate.Chess.Board.Model;
+using System.Collections.Generic;
 
 namespace Agate.Chess.Chessman.Controller
 {
@@ -47,6 +49,13 @@ namespace Agate.Chess.Chessman.Controller
         }
 
         protected abstract string GetViewPrefabPath(ChessmanColorType colorType);
-        
+
+        public abstract List<BoardCoord> GetPossibleMoves(BoardDataModel boardDataModel);
+
+        public void Move(BoardCoord targetCoord, Action onFinish)
+        {
+            _currentBoardCoordinate = targetCoord;
+            _view.Move(_getBoardPosition(targetCoord), onFinish);
+        }
     }
 }

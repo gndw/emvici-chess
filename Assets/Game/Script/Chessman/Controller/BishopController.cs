@@ -1,6 +1,9 @@
 using Agate.Chess.Chessman.View;
 using Agate.Chess.Chessman.Utility;
 using Agate.Chess.Prefab.Utility;
+using Agate.Chess.Board.Model;
+using Agate.Chess.Board.Utility;
+using System.Collections.Generic;
 
 namespace Agate.Chess.Chessman.Controller
 {
@@ -9,6 +12,11 @@ namespace Agate.Chess.Chessman.Controller
         public override ChessmanType GetChessmanType()
         {
             return ChessmanType.Bishop;
+        }
+
+        public override List<BoardCoord> GetPossibleMoves(BoardDataModel boardDataModel)
+        {
+            throw new System.NotImplementedException();
         }
 
         protected override string GetViewPrefabPath(ChessmanColorType colorType)
