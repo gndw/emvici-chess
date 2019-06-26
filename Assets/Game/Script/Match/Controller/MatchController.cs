@@ -1,4 +1,4 @@
-using Agate.Chess.Match.Board.Controller;
+using Agate.Chess.Board.Controller;
 using Agate.MVC.Core;
 using UnityEngine;
 
