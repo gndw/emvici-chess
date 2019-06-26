@@ -43,5 +43,14 @@ namespace Agate.Chess.Board.Model
 
             return result;
         }
+
+        public bool IsBoardCoordinateOccupied(BoardCoord coord)
+        {
+            foreach (var item in Data.Keys)
+            {
+                if (item.X == coord.X && item.Y == coord.Y) return true;
+            }
+            return false;
+        }
     }
 }

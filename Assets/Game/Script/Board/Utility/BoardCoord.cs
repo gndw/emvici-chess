@@ -10,5 +10,10 @@ namespace Agate.Chess.Board.Utility
             X = x;
             Y = y;
         }
+
+        public bool IsValid ()
+        {
+            return X >= 1 && X <= 8 && Y >= 1 && Y <= 8;
+        }
     }
 }

@@ -16,25 +16,50 @@ namespace Agate.Chess.Chessman.Controller
 
         public override List<BoardCoord> GetPossibleMoves(BoardDataModel boardDataModel)
         {
+            BoardCoord oneStep;
+            BoardCoord twoStep;
+            int twoStepCoordinate;
+            BoardCoord eatRightStep;
+            BoardCoord eatLeftStep;
+
             List<BoardCoord> possibleMoves = new List<BoardCoord>();
             switch (_colorType)
             {
                 case ChessmanColorType.Light :
                 {
-                    possibleMoves.Add(new BoardCoord(_currentBoardCoordinate.X, _currentBoardCoordinate.Y + 1));
-                    if (_currentBoardCoordinate.Y == 2) {
-                        possibleMoves.Add(new BoardCoord(_currentBoardCoordinate.X, _currentBoardCoordinate.Y + 2));
-                    }
+                    oneStep = new BoardCoord(_currentBoardCoordinate.X, _currentBoardCoordinate.Y + 1);
+                    twoStep = new BoardCoord(_currentBoardCoordinate.X, _currentBoardCoordinate.Y + 2);
+                    twoStepCoordinate = 2;
+                    eatRightStep = new BoardCoord(_currentBoardCoordinate.X + 1, _currentBoardCoordinate.Y + 1);
+                    eatLeftStep = new BoardCoord(_currentBoardCoordinate.X - 1, _currentBoardCoordinate.Y + 1);
                     break;
                 }
                 case ChessmanColorType.Dark :
                 {
-                    possibleMoves.Add(new BoardCoord(_currentBoardCoordinate.X, _currentBoardCoordinate.Y - 1));
-                    if (_currentBoardCoordinate.Y == 7) {
-                        possibleMoves.Add(new BoardCoord(_currentBoardCoordinate.X, _currentBoardCoordinate.Y - 2));
-                    }
+                    oneStep = new BoardCoord(_currentBoardCoordinate.X, _currentBoardCoordinate.Y - 1);
+                    twoStep = new BoardCoord(_currentBoardCoordinate.X, _currentBoardCoordinate.Y - 2);
+                    twoStepCoordinate = 7;
+                    eatRightStep = new BoardCoord(_currentBoardCoordinate.X - 1, _currentBoardCoordinate.Y - 1);
+                    eatLeftStep = new BoardCoord(_currentBoardCoordinate.X + 1, _currentBoardCoordinate.Y - 1);
                     break;
                 }
+                default: return null;
+            }
+
+            if (oneStep.IsValid() && !boardDataModel.IsBoardCoordinateOccupied(oneStep)) {
+                possibleMoves.Add(oneStep);
+            }
+
+            if (_currentBoardCoordinate.Y == twoStepCoordinate && twoStep.IsValid() && !boardDataModel.IsBoardCoordinateOccupied(twoStep)) {
+                possibleMoves.Add(twoStep);
+            }
+
+            if (eatRightStep.IsValid() && boardDataModel.IsBoardCoordinateOccupied(eatRightStep)) {
+                possibleMoves.Add(eatRightStep);
+            }
+
+            if (eatLeftStep.IsValid() && boardDataModel.IsBoardCoordinateOccupied(eatLeftStep)) {
+                possibleMoves.Add(eatLeftStep);
             }
 
             return possibleMoves;
