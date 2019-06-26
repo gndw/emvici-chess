@@ -1,18 +1,24 @@
 using Agate.Chess.Chessman.View;
 using Agate.Chess.Chessman.Utility;
+using Agate.Chess.Prefab.Utility;
 
 namespace Agate.Chess.Chessman.Controller
 {
-    public class BishopController : ChessmanController
+    public class BishopController : ChessmanController<BishopView>
     {
-        public BishopController (BishopView view) : base(view)
-        {
-            
-        }
-
         public override ChessmanType GetChessmanType()
         {
             return ChessmanType.Bishop;
+        }
+
+        protected override string GetViewPrefabPath(ChessmanColorType colorType)
+        {
+            switch (colorType)
+            {
+                case ChessmanColorType.Light : return PrefabConstant.PathBishopLightView;
+                case ChessmanColorType.Dark : return PrefabConstant.PathBishopDarkView;
+                default: return null;
+            }
         }
     }
 }

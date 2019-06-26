@@ -4,32 +4,28 @@ using Agate.Chess.Chessman.Utility;
 using Agate.Chess.Board.Utility;
 using Agate.MVC.Core;
 using UnityEngine;
+using Agate.Chess.Prefab.Controller;
 
 namespace Agate.Chess.Chessman.Controller
 {
-    public abstract class ChessmanController : BaseController, IChessmanController
+    public abstract class ChessmanController<T> : BaseController, IChessmanController where T : ChessmanView
     {
         public event Function OnChessmanSelected;
 
-        private ChessmanView _viewPrefab;
-
-        protected ChessmanView _view;
+        protected T _view;
         protected Func<BoardCoord,Vector3> _getBoardPosition;
+        protected Func<ChessmanColorType,Vector3> _getFacingDirection;
         protected BoardCoord _currentBoardCoordinate;
         protected ChessmanColorType _colorType;
 
-        public ChessmanController(ChessmanView view)
-        {
-            _viewPrefab = view;
-        }
-
-        public void Init (Func<BoardCoord,Vector3> getBoardPosition, BoardCoord coordinate, ChessmanColorType colorType)
+        public void Init (Func<BoardCoord,Vector3> getBoardPosition, Func<ChessmanColorType,Vector3> getFacingDirection, BoardCoord coordinate, ChessmanColorType colorType)
         {
             _getBoardPosition = getBoardPosition;
+            _getFacingDirection = getFacingDirection;
             _currentBoardCoordinate = coordinate;
             _colorType = colorType;
 
-            _view = UnityEngine.Object.Instantiate(_viewPrefab, _getBoardPosition(_currentBoardCoordinate), Quaternion.identity);
+            _view = PrefabController.Instance.GetObject<T>(GetViewPrefabPath(_colorType), _getBoardPosition(_currentBoardCoordinate), Quaternion.LookRotation(getFacingDirection(_colorType)), null);
             _view.OnChessmanSelected += () => OnChessmanSelected?.Invoke();
         }
 
@@ -49,6 +45,8 @@ namespace Agate.Chess.Chessman.Controller
         {
             if (_view != null) UnityEngine.Object.Destroy(_view);
         }
+
+        protected abstract string GetViewPrefabPath(ChessmanColorType colorType);
         
     }
 }

@@ -1,4 +1,4 @@
 namespace Agate.Chess.Chessman.Utility
 {
-    public enum ChessmanColorType { Undefined, White, Black }
+    public enum ChessmanColorType { Undefined, Light, Dark }
 }

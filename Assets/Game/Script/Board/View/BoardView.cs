@@ -1,4 +1,5 @@
 using Agate.Chess.Board.Utility;
+using Agate.Chess.Chessman.Utility;
 using Agate.Chess.Game;
 using UnityEngine;
 
@@ -26,6 +27,16 @@ namespace Agate.Chess.Board.View
                 0,
                 _collider.transform.position.z + (((float)coord.Y - 0.5f) * _collider.size.z / 8) - _collider.size.z / 2
             ) ;
+        }
+
+        public Vector3 GetFacingDirection (ChessmanColorType colorType)
+        {
+            switch (colorType)
+            {
+                case ChessmanColorType.Light : return GetBoardPosition(new BoardCoord(1,8)) - GetBoardPosition(new BoardCoord(1,1));
+                case ChessmanColorType.Dark : return GetBoardPosition(new BoardCoord(1,1)) - GetBoardPosition(new BoardCoord(1,8));
+                default: return Vector3.zero;
+            }
         }
     }
 }
