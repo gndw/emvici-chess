@@ -87,5 +87,21 @@ namespace Agate.Chess.Board.Controller
             });
             return result;
         }
+
+        public void Eat(IChessmanController eater, IChessmanController eaten, Action onFinish)
+        {
+            eater.Move(eaten.GetBoardCoord(), () => {
+                eaten.Destroy();
+                _chessmans.Remove(eaten);
+                onFinish();
+            });
+        }
+
+        public bool TryGetChessman (BoardCoord coord, out IChessmanController icc)
+        {
+            icc = _chessmans.Find(chessman => chessman.GetBoardCoord() == coord);
+            if (icc != null) return true;
+            else return false;
+        }
     }
 }

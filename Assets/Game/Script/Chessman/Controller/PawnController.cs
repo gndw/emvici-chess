@@ -54,11 +54,11 @@ namespace Agate.Chess.Chessman.Controller
                 possibleMoves.Add(twoStep);
             }
 
-            if (eatRightStep.IsValid() && boardDataModel.IsBoardCoordinateOccupied(eatRightStep)) {
+            if (eatRightStep.IsValid() && boardDataModel.IsBoardCoordinateOccupiedByEnemy(_colorType, eatRightStep)) {
                 possibleMoves.Add(eatRightStep);
             }
 
-            if (eatLeftStep.IsValid() && boardDataModel.IsBoardCoordinateOccupied(eatLeftStep)) {
+            if (eatLeftStep.IsValid() && boardDataModel.IsBoardCoordinateOccupiedByEnemy(_colorType, eatLeftStep)) {
                 possibleMoves.Add(eatLeftStep);
             }
 

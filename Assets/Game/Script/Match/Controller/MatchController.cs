@@ -12,7 +12,7 @@ namespace Agate.Chess.Match.Controller
     public class MatchController : SceneController
     {
         [SerializeField]
-        private BoardController _boardController;
+        private BoardController _boardController = null;
 
         private enum MatchTurnState {Idle, ChessmanSelected, Moving}
         private class MatchState
@@ -58,23 +58,53 @@ namespace Agate.Chess.Match.Controller
             }
         }
 
+        private void SelectChessman(IChessmanController icc)
+        {
+            List<BoardCoord> possibleMoves = _boardController.GetPossibleMoves(icc);
+            if (possibleMoves.Count > 0)
+            {
+                _boardController.SetHighlight(possibleMoves);
+                _currentState.PossibleMoves = possibleMoves;
+                _currentState.SelectedChessman = icc;
+                _currentState.TurnState = MatchTurnState.ChessmanSelected;
+            }
+            else
+            {
+                UnSelectChessman();
+            }
+        }
+
+        private void UnSelectChessman()
+        {
+            _boardController.ClearHighlight();
+            _currentState.TurnState = MatchTurnState.Idle;
+            _currentState.PossibleMoves.Clear();
+            _currentState.SelectedChessman = null;
+        }
+
         private void OnBoardSelected(BoardCoord coord)
         {
             switch (_currentState.TurnState)
             {
                 case MatchTurnState.ChessmanSelected:
                 {
-                    if (_currentState.PossibleMoves.Exists((crd) => crd.X == coord.X && crd.Y == coord.Y))
+                    if (_currentState.PossibleMoves.Contains(coord))
                     {
-                        _currentState.TurnState = MatchTurnState.Moving;
-                        _boardController.Move(_currentState.SelectedChessman, coord, SwitchTurn);
+                        IChessmanController icc;
+                        if (_boardController.TryGetChessman(coord, out icc))
+                        {
+                            _currentState.TurnState = MatchTurnState.Moving;
+                            _boardController.Eat(_currentState.SelectedChessman, icc, SwitchTurn);
+                        }
+                        else
+                        {
+                            _currentState.TurnState = MatchTurnState.Moving;
+                            _boardController.Move(_currentState.SelectedChessman, coord, SwitchTurn);
+                        }
                     }
                     else
                     {
-                        _boardController.ClearHighlight();
-                        _currentState.TurnState = MatchTurnState.Idle;
-                        _currentState.PossibleMoves.Clear();
-                        _currentState.SelectedChessman = null;
+                        UnSelectChessman();
                     }
                     break;
                 }
@@ -83,20 +113,29 @@ namespace Agate.Chess.Match.Controller
 
         private void OnChessmanControllerSelected(IChessmanController icc)
         {
-            if (icc.GetChessmanColorType() != _currentState.Player)
-            return;
-
             switch (_currentState.TurnState)
             {
                 case MatchTurnState.Idle:
                 {
-                    List<BoardCoord> possibleMoves = _boardController.GetPossibleMoves(icc);
-                    if (possibleMoves.Count > 0)
+                    if (icc.GetChessmanColorType() == _currentState.Player)
                     {
-                        _boardController.SetHighlight(possibleMoves);
-                        _currentState.PossibleMoves = possibleMoves;
-                        _currentState.SelectedChessman = icc;
-                        _currentState.TurnState = MatchTurnState.ChessmanSelected;
+                        SelectChessman(icc);
+                    }
+                    break;
+                }
+                case MatchTurnState.ChessmanSelected:
+                {
+                    if (icc.GetChessmanColorType() == _currentState.Player)
+                    {
+                        SelectChessman(icc);
+                    }
+                    else
+                    {
+                        if (_currentState.PossibleMoves.Contains(icc.GetBoardCoord()))
+                        {
+                            _currentState.TurnState = MatchTurnState.Moving;
+                            _boardController.Eat(_currentState.SelectedChessman, icc, SwitchTurn);
+                        }
                     }
                     break;
                 }

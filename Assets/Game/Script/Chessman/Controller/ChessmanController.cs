@@ -45,7 +45,7 @@ namespace Agate.Chess.Chessman.Controller
 
         public void Destroy ()
         {
-            if (_view != null) UnityEngine.Object.Destroy(_view);
+            if (_view != null) UnityEngine.Object.Destroy(_view.gameObject);
         }
 
         protected abstract string GetViewPrefabPath(ChessmanColorType colorType);

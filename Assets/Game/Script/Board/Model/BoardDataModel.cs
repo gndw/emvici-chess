@@ -46,9 +46,15 @@ namespace Agate.Chess.Board.Model
 
         public bool IsBoardCoordinateOccupied(BoardCoord coord)
         {
-            foreach (var item in Data.Keys)
+            return Data.ContainsKey(coord);
+        }
+
+        public bool IsBoardCoordinateOccupiedByEnemy(ChessmanColorType playerType, BoardCoord coord)
+        {
+            ChessmanDataModel cdm;
+            if (Data.TryGetValue(coord, out cdm))
             {
-                if (item.X == coord.X && item.Y == coord.Y) return true;
+                return cdm.ColorType != playerType;
             }
             return false;
         }

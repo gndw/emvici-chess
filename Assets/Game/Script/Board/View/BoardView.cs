@@ -11,7 +11,7 @@ namespace Agate.Chess.Board.View
         public event BoardFunction OnBoardSelected;
 
         [SerializeField]
-        private GameObject _boardHighlightPrefab;
+        private GameObject _boardHighlightPrefab = null;
 
         private List<GameObject> _createdBoardHighlights = new List<GameObject>();
         private List<GameObject> _activeBoardHighlights = new List<GameObject>();
