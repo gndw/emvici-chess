@@ -17,7 +17,6 @@ namespace Agate.Chess.Board.Controller
     {
         public event BoardFunction OnBoardSelected;
         public event ChessmanFunction OnChessmanSelected;
-        public event ChessmanControllerFunction OnChessmanControllerSelected;
 
         private BoardView _view;
         private List<IChessmanController> _chessmans = new List<IChessmanController>();
@@ -49,18 +48,31 @@ namespace Agate.Chess.Board.Controller
                 }
                 
                 icc.Init(_view.GetBoardPosition, _view.GetFacingDirection, data.Key, data.Value.ColorType);
-                icc.OnChessmanSelected += () => 
-                {
-                    OnChessmanSelected?.Invoke(icc.GetChessmanType(), icc.GetChessmanColorType(), icc.GetBoardCoord());
-                    OnChessmanControllerSelected?.Invoke(icc);
-                };
+                icc.OnChessmanSelected += () => OnChessmanSelected?.Invoke(icc.GetChessmanType(), icc.GetChessmanColorType(), icc.GetBoardCoord());
                 _chessmans.Add(icc);
             }
         }
 
-        public void Move(IChessmanController selectedChessman, BoardCoord targetCoord, Action onFinish)
+        public void Move(BoardCoord originCoord, BoardCoord targetCoord, Action onFinish)
         {
-            selectedChessman.Move(targetCoord, onFinish);
+            IChessmanController icc;
+            if (TryGetChessman(originCoord, out icc))
+            {
+                IChessmanController targeticc;
+                if (TryGetChessman(targetCoord, out targeticc))
+                {
+                    icc.Move(targetCoord, () => {
+                        targeticc.Destroy();
+                        _chessmans.Remove(targeticc);
+                        onFinish();
+                    });
+                }
+                else
+                {
+                    icc.Move(targetCoord, onFinish);
+                }
+            }
+            else onFinish();
         }
 
         public void SetHighlight (List<BoardCoord> coordinates)
@@ -73,10 +85,15 @@ namespace Agate.Chess.Board.Controller
             _view.SetHighlight(new List<BoardCoord>());
         }
 
-        public List<BoardCoord> GetPossibleMoves (IChessmanController icc)
+        public List<BoardCoord> GetPossibleMoves (BoardCoord coord)
         {
-            BoardDataModel bdm = GetBoardDataModel();
-            return icc.GetPossibleMoves(bdm);
+            IChessmanController icc;
+            if (TryGetChessman(coord, out icc))
+            {
+                BoardDataModel bdm = GetBoardDataModel();
+                return icc.GetPossibleMoves(bdm);
+            }
+            else return new List<BoardCoord>();
         }
 
         public BoardDataModel GetBoardDataModel ()
@@ -88,16 +105,7 @@ namespace Agate.Chess.Board.Controller
             return result;
         }
 
-        public void Eat(IChessmanController eater, IChessmanController eaten, Action onFinish)
-        {
-            eater.Move(eaten.GetBoardCoord(), () => {
-                eaten.Destroy();
-                _chessmans.Remove(eaten);
-                onFinish();
-            });
-        }
-
-        public bool TryGetChessman (BoardCoord coord, out IChessmanController icc)
+        private bool TryGetChessman (BoardCoord coord, out IChessmanController icc)
         {
             icc = _chessmans.Find(chessman => chessman.GetBoardCoord() == coord);
             if (icc != null) return true;
