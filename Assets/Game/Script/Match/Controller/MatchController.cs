@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Agate.Chess.Board.Controller;
 using Agate.Chess.Board.Utility;
 using Agate.Chess.Chessman.Utility;
@@ -42,7 +41,8 @@ namespace Agate.Chess.Match.Controller
             set;
         }
         private MatchState _currentState;
-        private BoardController _boardController = null;
+        private BoardController _boardController = new BoardController();
+
         public override void Load()
         {
             _boardController.Init(_prefabController);

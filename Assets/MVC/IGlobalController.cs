@@ -1,7 +1,9 @@
+using System;
+
 namespace Agate.MVC.Core
 {
     public interface IGlobalController
     {
-        void Init();
+        void Init(Action onInitialized);
     }
 }

@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Agate.MVC.Core
 {
-    public abstract class BaseGameController : MonoBehaviour
+    public abstract class BaseGameController : BaseMonoBehaviourController, IGlobalController
     {
-        private Dictionary<Type, IGlobalController> _controllers = new Dictionary<Type, IGlobalController>();
+        private Dictionary<Type, IGlobalController> _initializedControllers = new Dictionary<Type, IGlobalController>();
+        private Sequence _controllerInitializeProcess = new Sequence();
 
         private void Awake()
         {
@@ -15,17 +15,35 @@ namespace Agate.MVC.Core
 
         private void Start()
         {
-            GameControllerInit(GameStart);
+            Init(() =>
+            {
+                _initializedControllers.Add(typeof(BaseGameController), this);
+                GameControllerInit();
+                _controllerInitializeProcess.OnFinishSequence += GameStart;
+                _controllerInitializeProcess.Execute();
+            });
         }
 
-        protected abstract void GameControllerInit(Action onInitializeCompleted);
+        public void Init(Action onInitialized)
+        {
+            onInitialized();
+        }
+
+        protected abstract void GameControllerInit();
         protected abstract void GameStart();
 
         protected void RegisterController<T>() where T : GlobalController<T>, new()
         {
             T controller = new T();
-            controller.Init();
-            _controllers.Add(typeof(T), controller);
+            _controllerInitializeProcess.AddSequence((onInitialized) =>
+            {
+                controller.InjectControllers(_initializedControllers);
+                controller.Init(() =>
+                {
+                    _initializedControllers.Add(typeof(T), controller);
+                    onInitialized();
+                });
+            });
         }
 
         protected void StartSceneControllerInThisScene()
@@ -33,7 +51,7 @@ namespace Agate.MVC.Core
             SceneController scenecontroller = FindObjectOfType<SceneController>();
             if (scenecontroller != null)
             {
-                scenecontroller.InjectControllers(_controllers);
+                scenecontroller.InjectControllers(_initializedControllers);
                 scenecontroller.Load();
             }
         }

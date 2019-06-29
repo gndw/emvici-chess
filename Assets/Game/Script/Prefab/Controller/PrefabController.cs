@@ -6,7 +6,7 @@ namespace Agate.Chess.Prefab.Controller
     public class PrefabController : GlobalController<PrefabController>
     {
         private Dictionary<string, Object> _prefabCache = new Dictionary<string, Object>();
-        public override void Init() { }
+
         public T GetObject<T>(string path, Vector3 position, Quaternion rotation, Transform parent) where T : Object
         {
             if (!_prefabCache.ContainsKey(path))
