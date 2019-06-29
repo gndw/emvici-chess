@@ -1,7 +1,4 @@
 namespace Agate.Chess.Chessman.View
 {
-    public class RookView : ChessmanView
-    {
-        
-    }
+    public class RookView : ChessmanView { }
 }

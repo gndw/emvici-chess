@@ -4,10 +4,10 @@ using System.Reflection;
 using UnityEngine;
 
 namespace Agate.MVC.Core
-{   
+{
     public abstract class SceneController : MonoBehaviour
     {
-        public void InjectControllers (Dictionary<Type,IGlobalController> controllers)
+        public void InjectControllers(Dictionary<Type, IGlobalController> controllers)
         {
             PropertyInfo[] props = this.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (var prop in props)
@@ -23,7 +23,7 @@ namespace Agate.MVC.Core
             }
         }
 
-        public abstract void Load ();
+        public abstract void Load();
     }
 }
 

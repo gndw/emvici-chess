@@ -6,7 +6,7 @@ namespace Agate.MVC.Core
 {
     public interface ISceneController<out T> where T : MonoBehaviour
     {
-        void InjectControllers (Dictionary<Type,IGlobalController> controllers);
-        void Load ();
+        void InjectControllers(Dictionary<Type, IGlobalController> controllers);
+        void Load();
     }
 }

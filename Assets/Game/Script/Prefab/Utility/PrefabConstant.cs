@@ -1,11 +1,8 @@
-using UnityEngine;
-
 namespace Agate.Chess.Prefab.Utility
 {
     public class PrefabConstant
     {
         public const string PathBoardView = "Prefab/Board/BoardView";
-
         public const string PathPawnLightView = "Prefab/Chessman/PawnLightView";
         public const string PathPawnDarkView = "Prefab/Chessman/PawnDarkView";
         public const string PathRookLightView = "Prefab/Chessman/RookLightView";
@@ -18,6 +15,5 @@ namespace Agate.Chess.Prefab.Utility
         public const string PathQueenDarkView = "Prefab/Chessman/QueenDarkView";
         public const string PathKingLightView = "Prefab/Chessman/KingLightView";
         public const string PathKingDarkView = "Prefab/Chessman/KingDarkView";
-
     }
 }

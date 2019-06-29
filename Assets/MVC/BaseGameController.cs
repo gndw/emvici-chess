@@ -6,20 +6,20 @@ namespace Agate.MVC.Core
 {
     public abstract class BaseGameController : MonoBehaviour
     {
-        private Dictionary<Type,IGlobalController> _controllers = new Dictionary<Type, IGlobalController>();
+        private Dictionary<Type, IGlobalController> _controllers = new Dictionary<Type, IGlobalController>();
 
-        private void Awake ()
+        private void Awake()
         {
             DontDestroyOnLoad(this);
         }
 
-        private void Start ()
+        private void Start()
         {
             GameControllerInit(GameStart);
         }
 
-        protected abstract void GameControllerInit (Action onInitializeCompleted);
-        protected abstract void GameStart ();
+        protected abstract void GameControllerInit(Action onInitializeCompleted);
+        protected abstract void GameStart();
 
         protected void RegisterController<T>() where T : GlobalController<T>, new()
         {
@@ -28,7 +28,7 @@ namespace Agate.MVC.Core
             _controllers.Add(typeof(T), controller);
         }
 
-        protected void StartSceneControllerInThisScene ()
+        protected void StartSceneControllerInThisScene()
         {
             SceneController scenecontroller = FindObjectOfType<SceneController>();
             if (scenecontroller != null)
