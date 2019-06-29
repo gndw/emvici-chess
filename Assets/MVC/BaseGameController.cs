@@ -11,6 +11,7 @@ namespace Agate.MVC.Core
         private Action _updates;
 
         public bool Main { get; private set; }
+        public bool Initialized { get; private set; }
 
         private void Awake()
         {
@@ -36,6 +37,7 @@ namespace Agate.MVC.Core
             {
                 _initializedControllers.Add(typeof(BaseGameController), this);
                 GameControllerInit();
+                _controllerInitializeProcess.OnFinishSequence += () => Initialized = true;
                 _controllerInitializeProcess.OnFinishSequence += GameStart;
                 _controllerInitializeProcess.Execute();
             });
@@ -76,9 +78,9 @@ namespace Agate.MVC.Core
             }
         }
 
-        public void InjectSceneController(SceneController scenecontroller)
+        public void InjectMonoBehaviourController(BaseMonoBehaviourController controller)
         {
-            scenecontroller.InjectControllers(_initializedControllers);
+            controller.InjectControllers(_initializedControllers);
         }
 
         private void Update()

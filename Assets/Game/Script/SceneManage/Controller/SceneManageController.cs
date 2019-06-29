@@ -57,7 +57,7 @@ namespace Agate.Chess.SceneManage.Controller
                     scenecontroller.StartScene();
                 };
 
-                _baseGameController.InjectSceneController(scenecontroller);
+                _baseGameController.InjectMonoBehaviourController(scenecontroller);
                 scenecontroller.OnSceneLoadingProgress += targetSceneLoading;
                 scenecontroller.OnSceneLoadingFinished += targetSceneFinishedLoading;
                 scenecontroller.Init();
