@@ -71,9 +71,20 @@ namespace Agate.Chess.Schedule.Controller
             return true;
         }
 
+        public int WaitForSeconds(float time, Action onFinish)
+        {
+            return StartCoroutine(IEWaitForSeconds(time, onFinish));
+        }
+
         private IEnumerator IEAction(IEnumerator ie, Action onFinish)
         {
             yield return ie;
+            onFinish();
+        }
+
+        private IEnumerator IEWaitForSeconds(float time, Action onFinish)
+        {
+            yield return new WaitForSeconds(time);
             onFinish();
         }
     }

@@ -32,7 +32,6 @@ namespace Agate.MVC.Core
 
         private void Start()
         {
-            Debug.Log("start");
             Init(() =>
             {
                 _initializedControllers.Add(typeof(BaseGameController), this);
@@ -64,14 +63,22 @@ namespace Agate.MVC.Core
             });
         }
 
-        protected void StartSceneControllerInThisScene()
+        protected T GetController<T>() where T : GlobalController<T>, new()
         {
-            SceneController scenecontroller = FindObjectOfType<SceneController>();
-            if (scenecontroller != null)
+            IGlobalController igc;
+            if (_initializedControllers.TryGetValue(typeof(T), out igc))
             {
-                scenecontroller.InjectControllers(_initializedControllers);
-                scenecontroller.Load();
+                return igc as T;
             }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void InjectSceneController(SceneController scenecontroller)
+        {
+            scenecontroller.InjectControllers(_initializedControllers);
         }
 
         private void Update()

@@ -5,6 +5,7 @@ namespace Agate.MVC.Core
 {
     public class Sequence
     {
+        public event ProgressFunction OnProgressSequence;
         public event Function OnFinishSequence;
 
         private List<SequenceObject> sequences = new List<SequenceObject>();
@@ -27,18 +28,37 @@ namespace Agate.MVC.Core
 
         public void Execute()
         {
-            for (int i = 1; i < sequences.Count; i++)
+            OnProgressSequence?.Invoke(0);
+            for (int i = 0; i < sequences.Count; i++)
             {
-                sequences[i - 1].FinishAction += sequences[i].Execute;
-                if (i == sequences.Count - 1)
+                if (i < sequences.Count - 1)
                 {
-                    sequences[i].FinishAction += () => OnFinishSequence?.Invoke();
+                    int index = i;
+                    sequences[i].FinishAction += () =>
+                    {
+                        float prog = ((float)index + 1) / sequences.Count;
+                        OnProgressSequence?.Invoke(prog);
+                        sequences[index + 1].Execute();
+                    };
+                }
+                else
+                {
+                    sequences[i].FinishAction += () =>
+                    {
+                        OnProgressSequence?.Invoke(1);
+                        OnFinishSequence?.Invoke();
+                    };
                 }
             }
 
             if (sequences.Count > 0)
             {
                 sequences[0].Execute();
+            }
+            else
+            {
+                OnProgressSequence?.Invoke(1);
+                OnFinishSequence?.Invoke();
             }
         }
     }

@@ -43,9 +43,16 @@ namespace Agate.Chess.Match.Controller
         private MatchState _currentState;
         private BoardController _boardController = new BoardController();
 
-        public override void Load()
+        protected override void Load(Sequence createLoadingSequence)
         {
-            _boardController.Init(_prefabController);
+            createLoadingSequence.AddSequence((next) =>
+            {
+                _boardController.Init(_prefabController);
+                next();
+            });
+        }
+        public override void StartScene()
+        {
             StartMatch();
         }
         private void StartMatch()
