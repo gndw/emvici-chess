@@ -8,7 +8,7 @@ namespace Agate.Chess.Prefab.Controller
     {
         private Dictionary<string,Object> _prefabCache = new Dictionary<string, Object>();
 
-        public void Init ()
+        public override void Init()
         {
             
         }
@@ -26,5 +26,7 @@ namespace Agate.Chess.Prefab.Controller
             T createdObj = Object.Instantiate<T>(obj, position, rotation, parent);
             return createdObj;
         }
+
+        
     }
 }

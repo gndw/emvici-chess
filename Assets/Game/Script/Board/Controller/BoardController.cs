@@ -18,12 +18,15 @@ namespace Agate.Chess.Board.Controller
         public event BoardFunction OnBoardSelected;
         public event ChessmanFunction OnChessmanSelected;
 
+        private PrefabController _prefabController;
         private BoardView _view;
         private List<IChessmanController> _chessmans = new List<IChessmanController>();
 
-        public void Init ()
+        public void Init (PrefabController prefabController)
         {
-            _view = PrefabController.Instance.GetObject<BoardView>(PrefabConstant.PathBoardView, Vector3.zero, Quaternion.identity, null);
+            _prefabController = prefabController;
+
+            _view = _prefabController.GetObject<BoardView>(PrefabConstant.PathBoardView, Vector3.zero, Quaternion.identity, null);
             _view.OnBoardSelected += (boardcoord) => OnBoardSelected?.Invoke(boardcoord);
 
             SetChessmanOnBoard(BoardDataModel.CreateAsNormalGame());
@@ -47,7 +50,7 @@ namespace Agate.Chess.Board.Controller
                     default: throw new System.NotImplementedException();
                 }
                 
-                icc.Init(_view.GetBoardPosition, _view.GetFacingDirection, data.Key, data.Value.ColorType);
+                icc.Init(_prefabController, _view.GetBoardPosition, _view.GetFacingDirection, data.Key, data.Value.ColorType);
                 icc.OnChessmanSelected += () => OnChessmanSelected?.Invoke(icc.GetChessmanType(), icc.GetChessmanColorType(), icc.GetBoardCoord());
                 _chessmans.Add(icc);
             }

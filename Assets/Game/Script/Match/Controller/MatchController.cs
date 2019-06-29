@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Agate.Chess.Board.Controller;
 using Agate.Chess.Board.Utility;
 using Agate.Chess.Chessman.Utility;
+using Agate.Chess.Prefab.Controller;
 using Agate.MVC.Core;
 using UnityEngine;
 
@@ -37,9 +38,12 @@ namespace Agate.Chess.Match.Controller
 
         private MatchState _currentState;
 
+        [Inject]
+        private PrefabController _prefabController {get; set;}
+
         public override void Load()
         {
-            _boardController.Init();
+            _boardController.Init(_prefabController);
 
             StartMatch();
         }
