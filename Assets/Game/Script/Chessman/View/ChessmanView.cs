@@ -11,7 +11,7 @@ namespace Agate.Chess.Chessman.View
         {
             OnChessmanSelected?.Invoke();
         }
-        internal void Move(Vector3 targetPosition, Action onFinish)
+        public void Move(Vector3 targetPosition, Action onFinish)
         {
             gameObject.transform.position = targetPosition;
             onFinish();

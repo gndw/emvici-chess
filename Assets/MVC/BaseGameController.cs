@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Agate.MVC.Core
 {
@@ -7,14 +8,31 @@ namespace Agate.MVC.Core
     {
         private Dictionary<Type, IGlobalController> _initializedControllers = new Dictionary<Type, IGlobalController>();
         private Sequence _controllerInitializeProcess = new Sequence();
+        private Action _updates;
+
+        public bool Main { get; private set; }
 
         private void Awake()
         {
-            DontDestroyOnLoad(this);
+            BaseGameController[] bgcs = FindObjectsOfType<BaseGameController>();
+            int length = bgcs.Length;
+            if (length == 1)
+            {
+                Main = true;
+                DontDestroyOnLoad(this);
+            }
+            else
+            {
+                for (int i = 0; i < length; i++)
+                {
+                    if (!bgcs[i].Main) Destroy(bgcs[i]);
+                }
+            }
         }
 
         private void Start()
         {
+            Debug.Log("start");
             Init(() =>
             {
                 _initializedControllers.Add(typeof(BaseGameController), this);
@@ -54,6 +72,16 @@ namespace Agate.MVC.Core
                 scenecontroller.InjectControllers(_initializedControllers);
                 scenecontroller.Load();
             }
+        }
+
+        private void Update()
+        {
+            _updates();
+        }
+
+        public void RegisterUpdate(Action action)
+        {
+            _updates += action;
         }
     }
 }
