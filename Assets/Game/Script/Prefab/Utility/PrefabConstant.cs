@@ -2,6 +2,7 @@ namespace Agate.Chess.Prefab.Utility
 {
     public class PrefabConstant
     {
+        public const string PathSceneManageView = "Prefab/SceneManage/SceneManageView";
         public const string PathBoardView = "Prefab/Board/BoardView";
         public const string PathPawnLightView = "Prefab/Chessman/PawnLightView";
         public const string PathPawnDarkView = "Prefab/Chessman/PawnDarkView";

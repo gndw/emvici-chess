@@ -6,12 +6,17 @@ namespace Agate.MVC.Core
 {
     public abstract class BaseGameController : BaseMonoBehaviourController, IGlobalController
     {
+        public bool Main { get; private set; }
+        public bool Initialized { get; private set; }
+        public RectTransform Canvas { get; private set; }
+
+        public event Function OnInitialLoadingStart;
+        public event ProgressFunction OnInitialLoadingProgress;
+        public event Function OnInitialLoadingFinished;
+
         private Dictionary<Type, IGlobalController> _initializedControllers = new Dictionary<Type, IGlobalController>();
         private Sequence _controllerInitializeProcess = new Sequence();
         private Action _updates;
-
-        public bool Main { get; private set; }
-        public bool Initialized { get; private set; }
 
         private void Awake()
         {
@@ -33,12 +38,21 @@ namespace Agate.MVC.Core
 
         private void Start()
         {
+            Canvas = GetComponentInChildren<Canvas>().gameObject.GetComponent<RectTransform>();
+
+            OnInitialLoadingStart?.Invoke();
+            _controllerInitializeProcess.OnProgressSequence += (prog) => OnInitialLoadingProgress?.Invoke(prog);
+            _controllerInitializeProcess.OnFinishSequence += () => OnInitialLoadingFinished?.Invoke();
+
             Init(() =>
             {
                 _initializedControllers.Add(typeof(BaseGameController), this);
                 GameControllerInit();
-                _controllerInitializeProcess.OnFinishSequence += () => Initialized = true;
-                _controllerInitializeProcess.OnFinishSequence += GameStart;
+                _controllerInitializeProcess.OnFinishSequence += () =>
+                {
+                    Initialized = true;
+                    GameStart();
+                };
                 _controllerInitializeProcess.Execute();
             });
         }

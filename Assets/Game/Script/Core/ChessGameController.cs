@@ -10,9 +10,9 @@ namespace Agate.Chess.Game
     {
         protected override void GameControllerInit()
         {
+            RegisterController<PrefabController>();
             RegisterController<ScheduleController>();
             RegisterController<SceneManageController>();
-            RegisterController<PrefabController>();
             RegisterController<RequestController>();
             RegisterController<ProgressController>();
         }
