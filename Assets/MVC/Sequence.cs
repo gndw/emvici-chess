@@ -8,7 +8,9 @@ namespace Agate.MVC.Core
         public event ProgressFunction OnProgressSequence;
         public event Function OnFinishSequence;
 
-        private List<SequenceObject> sequences = new List<SequenceObject>();
+        private List<SequenceObject> _sequences = new List<SequenceObject>();
+        private Action<Action> _separator;
+
         private class SequenceObject
         {
             public Action<Action> MainAction;
@@ -23,27 +25,48 @@ namespace Agate.MVC.Core
         {
             SequenceObject sobj = new SequenceObject();
             sobj.MainAction = newSequence;
-            sequences.Add(sobj);
+            _sequences.Add(sobj);
+        }
+
+        public void SetSeparatorSequence(Action<Action> newSeparatorSequence)
+        {
+            _separator = newSeparatorSequence;
+        }
+
+        public void RemoveSeparatorSequence()
+        {
+            _separator = null;
         }
 
         public void Execute()
         {
             OnProgressSequence?.Invoke(0);
-            for (int i = 0; i < sequences.Count; i++)
+            for (int i = 0; i < _sequences.Count; i++)
             {
-                if (i < sequences.Count - 1)
+                if (i < _sequences.Count - 1)
                 {
                     int index = i;
-                    sequences[i].FinishAction += () =>
+                    _sequences[i].FinishAction += () =>
                     {
-                        float prog = ((float)index + 1) / sequences.Count;
+                        float prog = ((float)index + 1) / _sequences.Count;
                         OnProgressSequence?.Invoke(prog);
-                        sequences[index + 1].Execute();
+
+                        if (_separator != null)
+                        {
+                            SequenceObject sep = new SequenceObject();
+                            sep.MainAction = _separator;
+                            sep.FinishAction += () => _sequences[index + 1].Execute();
+                            sep.Execute();
+                        }
+                        else
+                        {
+                            _sequences[index + 1].Execute();
+                        }
                     };
                 }
                 else
                 {
-                    sequences[i].FinishAction += () =>
+                    _sequences[i].FinishAction += () =>
                     {
                         OnProgressSequence?.Invoke(1);
                         OnFinishSequence?.Invoke();
@@ -51,9 +74,9 @@ namespace Agate.MVC.Core
                 }
             }
 
-            if (sequences.Count > 0)
+            if (_sequences.Count > 0)
             {
-                sequences[0].Execute();
+                _sequences[0].Execute();
             }
             else
             {

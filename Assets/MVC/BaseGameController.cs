@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -48,6 +49,7 @@ namespace Agate.MVC.Core
             {
                 _initializedControllers.Add(typeof(BaseGameController), this);
                 GameControllerInit();
+                _controllerInitializeProcess.SetSeparatorSequence((next) => StartCoroutine(IE_WaitNextFrame(next)));
                 _controllerInitializeProcess.OnFinishSequence += () =>
                 {
                     Initialized = true;
@@ -99,12 +101,24 @@ namespace Agate.MVC.Core
 
         private void Update()
         {
-            _updates();
+            if (Main && Initialized) _updates();
         }
 
         public void RegisterUpdate(Action action)
         {
             _updates += action;
+        }
+
+        private IEnumerator IE_WaitNextFrame(Action onFinish)
+        {
+            yield return null;
+            onFinish();
+        }
+
+        private IEnumerator IE_WaitForSeconds(float time, Action onFinish)
+        {
+            yield return new WaitForSeconds(time);
+            onFinish();
         }
     }
 }
