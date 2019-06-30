@@ -7,7 +7,12 @@ namespace Agate.MVC.Core
         public void Set(T model)
         {
             _model = model;
-            _model.Refresh += UpdateView;
+            _model.Refresh += () =>
+            {
+                UpdateView();
+                _model.IsDirty = false;
+            };
+            UpdateView();
         }
 
         public void ForceUpdateView()

@@ -1,6 +1,6 @@
 namespace Agate.MVC.Core
 {
-    public class BaseUIModel : BaseModel
+    public class BaseUIModel : BaseModel, IBaseUIModel
     {
         public event Function Refresh;
 
@@ -8,10 +8,10 @@ namespace Agate.MVC.Core
         public bool IsDirty
         {
             get { return _isDirty; }
-            protected set
+            set
             {
                 _isDirty = value;
-                Refresh?.Invoke();
+                if (_isDirty) Refresh?.Invoke();
             }
         }
     }

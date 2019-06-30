@@ -9,7 +9,7 @@ namespace Agate.MVC.Core
         public event Function OnFinishSequence;
 
         private List<SequenceObject> _sequences = new List<SequenceObject>();
-        private Action<Action> _separator;
+        private Action<Action> _separator = null;
 
         private class SequenceObject
         {
@@ -50,19 +50,19 @@ namespace Agate.MVC.Core
                     {
                         float prog = ((float)index + 1) / _sequences.Count;
                         OnProgressSequence?.Invoke(prog);
-
-                        if (_separator != null)
-                        {
-                            SequenceObject sep = new SequenceObject();
-                            sep.MainAction = _separator;
-                            sep.FinishAction += () => _sequences[index + 1].Execute();
-                            sep.Execute();
-                        }
-                        else
-                        {
-                            _sequences[index + 1].Execute();
-                        }
                     };
+
+                    if (_separator != null)
+                    {
+                        SequenceObject sep = new SequenceObject();
+                        sep.MainAction = _separator;
+                        sep.FinishAction += () => _sequences[index + 1].Execute();
+                        _sequences[i].FinishAction += () => sep.Execute();
+                    }
+                    else
+                    {
+                        _sequences[i].FinishAction += () => _sequences[index + 1].Execute();
+                    }
                 }
                 else
                 {

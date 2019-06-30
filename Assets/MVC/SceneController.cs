@@ -12,8 +12,9 @@
         {
             OnSceneLoadingStart?.Invoke();
             Load(_sceneLoadingProcess);
-            _sceneLoadingProcess.OnProgressSequence += OnSceneLoadingProgress;
-            _sceneLoadingProcess.OnFinishSequence += OnSceneLoadingFinished;
+            _sceneLoadingProcess.OnProgressSequence += (prog) => OnSceneLoadingProgress?.Invoke(prog);
+            _sceneLoadingProcess.OnFinishSequence += () => OnSceneLoadingFinished?.Invoke();
+
             _sceneLoadingProcess.Execute();
         }
 

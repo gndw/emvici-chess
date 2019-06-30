@@ -9,7 +9,7 @@ namespace Agate.Chess.SceneManage.View
     public class SceneManageView : BaseUIView<ISceneManageModel>
     {
         [SerializeField]
-        private Text _txtLoading;
+        private Text _txtLoading = null;
 
         protected override void UpdateView()
         {
