@@ -49,7 +49,7 @@ namespace Agate.Chess.Chessman.Controller
             _view.Move(_getBoardPosition(targetCoord), onFinish);
         }
 
-        public bool IsAbleToMoveHere(BoardCoord target, BoardDataModel bdm, Action<BoardCoord> onCanMove)
+        protected bool IsAbleToMoveHere(BoardCoord target, BoardDataModel bdm, Action<BoardCoord> onCanMove)
         {
             if (target.IsValid())
             {
@@ -71,7 +71,7 @@ namespace Agate.Chess.Chessman.Controller
             else return false;
         }
 
-        public void CalculateContinousMoves(List<Func<int, BoardCoord>> continousMethods, BoardDataModel bdm, Action<BoardCoord> onCanMove)
+        protected void CalculateContinousMoves(List<Func<int, BoardCoord>> continousMethods, BoardDataModel bdm, Action<BoardCoord> onCanMove)
         {
             continousMethods.ForEach((method) =>
             {
