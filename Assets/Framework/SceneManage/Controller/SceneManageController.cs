@@ -18,7 +18,6 @@ namespace Agate.MVC.Core
         public void LoadScene()
         {
             SetupSceneLoading();
-            Debug.Log(_scheduleController);
             _scheduleController.StartCoroutine(IE_LoadScene(() => OnSceneLoadingStart?.Invoke(), (prog) => OnSceneLoadingProgress?.Invoke(prog), () => OnSceneLoadingFinished?.Invoke()));
         }
 

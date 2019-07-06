@@ -2,6 +2,7 @@ using Agate.Chess.Menu.Model;
 using Agate.Chess.Menu.View;
 using Agate.Chess.Prefab.Utility;
 using Agate.Chess.Progress.Controller;
+using Agate.Chess.SceneManage.Controller;
 using Agate.Chess.SceneManage.Utility;
 using Agate.MVC.Core;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Agate.Chess.Menu.Controller
     public class MenuController : SceneController
     {
         [Inject]
-        private SceneManageController _sceneManageController { get; set; }
+        private ChessSceneManageController _sceneManageController { get; set; }
         [Inject]
         private ProgressController _progressController { get; set; }
         [Inject]
