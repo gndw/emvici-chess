@@ -1,11 +1,8 @@
 using Agate.Chess.Menu.Model;
 using Agate.Chess.Menu.View;
-using Agate.Chess.Prefab.Controller;
 using Agate.Chess.Prefab.Utility;
 using Agate.Chess.Progress.Controller;
-using Agate.Chess.SceneManage.Controller;
 using Agate.Chess.SceneManage.Utility;
-using Agate.Chess.Schedule.Controller;
 using Agate.MVC.Core;
 using UnityEngine;
 
@@ -15,8 +12,6 @@ namespace Agate.Chess.Menu.Controller
     {
         [Inject]
         private SceneManageController _sceneManageController { get; set; }
-        [Inject]
-        private ScheduleController _scheduleController { get; set; }
         [Inject]
         private ProgressController _progressController { get; set; }
         [Inject]

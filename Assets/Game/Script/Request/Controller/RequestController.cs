@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Agate.Chess.Schedule.Controller;
 using Agate.MVC.Core;
 using UnityEngine;
 

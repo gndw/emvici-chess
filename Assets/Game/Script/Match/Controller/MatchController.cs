@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Agate.Chess.Board.Controller;
 using Agate.Chess.Board.Utility;
 using Agate.Chess.Chessman.Utility;
-using Agate.Chess.Prefab.Controller;
 using Agate.MVC.Core;
+
 namespace Agate.Chess.Match.Controller
 {
     public class MatchController : SceneController

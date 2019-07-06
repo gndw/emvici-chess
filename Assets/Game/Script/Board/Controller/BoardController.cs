@@ -6,9 +6,9 @@ using Agate.Chess.Board.Utility;
 using Agate.Chess.Board.View;
 using Agate.Chess.Chessman.Controller;
 using Agate.Chess.Chessman.Utility;
-using Agate.Chess.Prefab.Controller;
 using Agate.Chess.Prefab.Utility;
 using Agate.MVC.Core;
+
 namespace Agate.Chess.Board.Controller
 {
     [Serializable]

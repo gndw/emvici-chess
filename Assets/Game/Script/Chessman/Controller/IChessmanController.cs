@@ -4,8 +4,8 @@ using UnityEngine;
 using Agate.Chess.Board.Model;
 using Agate.Chess.Board.Utility;
 using Agate.Chess.Chessman.Utility;
-using Agate.Chess.Prefab.Controller;
 using Agate.MVC.Core;
+
 namespace Agate.Chess.Chessman.Controller
 {
     public interface IChessmanController
