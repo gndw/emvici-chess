@@ -14,7 +14,29 @@ namespace Agate.Chess.Chessman.Controller
         }
         public override List<BoardCoord> GetPossibleMoves(BoardDataModel boardDataModel)
         {
-            throw new System.NotImplementedException();
+            List<BoardCoord> possibleMoves = new List<BoardCoord>();
+
+            List<BoardCoord> knightMoves = new List<BoardCoord>()
+            {
+                _currentBoardCoordinate.MoveCustom(-1, 2),
+                _currentBoardCoordinate.MoveCustom(1, 2),
+                _currentBoardCoordinate.MoveCustom(2, -1),
+                _currentBoardCoordinate.MoveCustom(2, 1),
+                _currentBoardCoordinate.MoveCustom(1, -2),
+                _currentBoardCoordinate.MoveCustom(-1, -2),
+                _currentBoardCoordinate.MoveCustom(-2, -1),
+                _currentBoardCoordinate.MoveCustom(-2, 1),
+            };
+
+            knightMoves.ForEach((c) =>
+            {
+                if (c.IsValid() && (!boardDataModel.IsBoardCoordinateOccupied(c) || boardDataModel.IsBoardCoordinateOccupiedByEnemy(_colorType, c)))
+                {
+                    possibleMoves.Add(c);
+                }
+            });
+
+            return possibleMoves;
         }
         protected override string GetViewPrefabPath(ChessmanColorType colorType)
         {

@@ -13,6 +13,52 @@ namespace Agate.Chess.Board.Utility
         {
             return X >= 1 && X <= 8 && Y >= 1 && Y <= 8;
         }
+
+        public BoardCoord MoveCustom(int x, int y)
+        {
+            return new BoardCoord(X + x, Y + y);
+        }
+
+        public BoardCoord MoveRight(int unit = 1)
+        {
+            return MoveCustom(unit, 0);
+        }
+
+        public BoardCoord MoveLeft(int unit = 1)
+        {
+            return MoveCustom(-unit, 0);
+        }
+
+        public BoardCoord MoveUp(int unit = 1)
+        {
+            return MoveCustom(0, unit);
+        }
+
+        public BoardCoord MoveDown(int unit = 1)
+        {
+            return MoveCustom(0, -unit);
+        }
+
+        public BoardCoord MoveUpRight(int unit = 1)
+        {
+            return MoveCustom(unit, unit);
+        }
+
+        public BoardCoord MoveDownRight(int unit = 1)
+        {
+            return MoveCustom(unit, -unit);
+        }
+
+        public BoardCoord MoveUpLeft(int unit = 1)
+        {
+            return MoveCustom(-unit, unit);
+        }
+
+        public BoardCoord MoveDownLeft(int unit = 1)
+        {
+            return MoveCustom(-unit, -unit);
+        }
+
         public static bool operator ==(BoardCoord coord1, BoardCoord coord2)
         {
             return coord1.X == coord2.X && coord1.Y == coord2.Y;

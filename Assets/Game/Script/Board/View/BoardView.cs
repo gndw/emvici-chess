@@ -12,6 +12,7 @@ namespace Agate.Chess.Board.View
         private GameObject _boardHighlightPrefab = null;
         private List<GameObject> _createdBoardHighlights = new List<GameObject>();
         private List<GameObject> _activeBoardHighlights = new List<GameObject>();
+
         protected override void OnColliderSelected(RaycastHit hit)
         {
             Vector3 preciseLocation = hit.point - _collider.transform.position + _collider.size / 2;

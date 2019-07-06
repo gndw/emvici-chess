@@ -48,5 +48,42 @@ namespace Agate.Chess.Chessman.Controller
             _currentBoardCoordinate = targetCoord;
             _view.Move(_getBoardPosition(targetCoord), onFinish);
         }
+
+        public bool IsAbleToMoveHere(BoardCoord target, BoardDataModel bdm, Action<BoardCoord> onCanMove)
+        {
+            if (target.IsValid())
+            {
+                if (bdm.IsBoardCoordinateOccupied(target))
+                {
+                    if (bdm.IsBoardCoordinateOccupiedByEnemy(_colorType, target))
+                    {
+                        onCanMove(target);
+                        return false;
+                    }
+                    else return false;
+                }
+                else
+                {
+                    onCanMove(target);
+                    return true;
+                }
+            }
+            else return false;
+        }
+
+        public void CalculateContinousMoves(List<Func<int, BoardCoord>> continousMethods, BoardDataModel bdm, Action<BoardCoord> onCanMove)
+        {
+            continousMethods.ForEach((method) =>
+            {
+                int counter = 0;
+                BoardCoord step;
+                do
+                {
+                    counter += 1;
+                    step = method(counter);
+                }
+                while (IsAbleToMoveHere(step, bdm, onCanMove));
+            });
+        }
     }
 }

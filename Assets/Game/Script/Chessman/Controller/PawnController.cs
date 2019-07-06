@@ -14,51 +14,44 @@ namespace Agate.Chess.Chessman.Controller
         }
         public override List<BoardCoord> GetPossibleMoves(BoardDataModel boardDataModel)
         {
-            BoardCoord oneStep;
-            BoardCoord twoStep;
-            int twoStepCoordinate;
-            BoardCoord eatRightStep;
-            BoardCoord eatLeftStep;
             List<BoardCoord> possibleMoves = new List<BoardCoord>();
+            List<BoardCoord> normalMove = new List<BoardCoord>();
+            List<BoardCoord> eatMove = new List<BoardCoord>();
+
             switch (_colorType)
             {
                 case ChessmanColorType.Light:
                     {
-                        oneStep = new BoardCoord(_currentBoardCoordinate.X, _currentBoardCoordinate.Y + 1);
-                        twoStep = new BoardCoord(_currentBoardCoordinate.X, _currentBoardCoordinate.Y + 2);
-                        twoStepCoordinate = 2;
-                        eatRightStep = new BoardCoord(_currentBoardCoordinate.X + 1, _currentBoardCoordinate.Y + 1);
-                        eatLeftStep = new BoardCoord(_currentBoardCoordinate.X - 1, _currentBoardCoordinate.Y + 1);
+                        normalMove.Add(_currentBoardCoordinate.MoveUp());
+                        if (_currentBoardCoordinate.Y == 2) normalMove.Add(_currentBoardCoordinate.MoveUp(2));
+                        eatMove.Add(_currentBoardCoordinate.MoveCustom(1, 1));
+                        eatMove.Add(_currentBoardCoordinate.MoveCustom(-1, 1));
                         break;
                     }
                 case ChessmanColorType.Dark:
                     {
-                        oneStep = new BoardCoord(_currentBoardCoordinate.X, _currentBoardCoordinate.Y - 1);
-                        twoStep = new BoardCoord(_currentBoardCoordinate.X, _currentBoardCoordinate.Y - 2);
-                        twoStepCoordinate = 7;
-                        eatRightStep = new BoardCoord(_currentBoardCoordinate.X - 1, _currentBoardCoordinate.Y - 1);
-                        eatLeftStep = new BoardCoord(_currentBoardCoordinate.X + 1, _currentBoardCoordinate.Y - 1);
+                        normalMove.Add(_currentBoardCoordinate.MoveDown());
+                        if (_currentBoardCoordinate.Y == 7) normalMove.Add(_currentBoardCoordinate.MoveDown(2));
+                        eatMove.Add(_currentBoardCoordinate.MoveCustom(-1, -1));
+                        eatMove.Add(_currentBoardCoordinate.MoveCustom(1, -1));
                         break;
                     }
                 default:
                     return null;
             }
-            if (oneStep.IsValid() && !boardDataModel.IsBoardCoordinateOccupied(oneStep))
+
+            normalMove.ForEach((c) =>
             {
-                possibleMoves.Add(oneStep);
-            }
-            if (_currentBoardCoordinate.Y == twoStepCoordinate && twoStep.IsValid() && !boardDataModel.IsBoardCoordinateOccupied(twoStep))
+                if (c.IsValid() && !boardDataModel.IsBoardCoordinateOccupied(c))
+                    possibleMoves.Add(c);
+            });
+
+            eatMove.ForEach((c) =>
             {
-                possibleMoves.Add(twoStep);
-            }
-            if (eatRightStep.IsValid() && boardDataModel.IsBoardCoordinateOccupiedByEnemy(_colorType, eatRightStep))
-            {
-                possibleMoves.Add(eatRightStep);
-            }
-            if (eatLeftStep.IsValid() && boardDataModel.IsBoardCoordinateOccupiedByEnemy(_colorType, eatLeftStep))
-            {
-                possibleMoves.Add(eatLeftStep);
-            }
+                if (c.IsValid() && boardDataModel.IsBoardCoordinateOccupiedByEnemy(_colorType, c))
+                    possibleMoves.Add(c);
+            });
+
             return possibleMoves;
         }
         protected override string GetViewPrefabPath(ChessmanColorType colorType)
